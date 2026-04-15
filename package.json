@@ -20,6 +20,10 @@
     "node": ">=18.0.0"
   },
   "license": "MIT",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
     "graphql": "^16.13.2",
