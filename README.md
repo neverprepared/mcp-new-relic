@@ -13,13 +13,13 @@ A [Model Context Protocol (MCP)](https://modelcontextprotocol.io) server that ex
 ### npx (no install required)
 
 ```bash
-NEW_RELIC_API_KEY=NRAK-... NEW_RELIC_ACCOUNT_ID=1234567 npx mcp-new-relic
+NEW_RELIC_API_KEY=NRAK-... NEW_RELIC_ACCOUNT_ID=1234567 npx @neverprepared/mcp-new-relic
 ```
 
 ### Global install
 
 ```bash
-npm install -g mcp-new-relic
+npm install -g @neverprepared/mcp-new-relic
 NEW_RELIC_API_KEY=NRAK-... NEW_RELIC_ACCOUNT_ID=1234567 mcp-new-relic
 ```
 
@@ -35,7 +35,7 @@ Add to your `claude_desktop_config.json`:
   "mcpServers": {
     "new-relic": {
       "command": "npx",
-      "args": ["mcp-new-relic"],
+      "args": ["@neverprepared/mcp-new-relic"],
       "env": {
         "NEW_RELIC_API_KEY": "NRAK-...",
         "NEW_RELIC_ACCOUNT_ID": "1234567"
