@@ -45,8 +45,8 @@ interface TypedError {
   type: string;
 }
 
-export function mutationErrorResult(errors: TypedError[], source = 'Operation'): CallToolResult | null {
-  if (errors.length === 0) return null;
+export function mutationErrorResult(errors: TypedError[] | null | undefined, source = 'Operation'): CallToolResult | null {
+  if (!errors || errors.length === 0) return null;
   return {
     content: [{ type: 'text', text: `${source} errors:\n${errors.map((e) => `[${e.type}] ${e.description}`).join('\n')}` }],
     isError: true,
