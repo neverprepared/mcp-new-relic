@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { startServer } from './server.js';
 import { logger } from './logger.js';
 
