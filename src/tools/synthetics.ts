@@ -325,7 +325,7 @@ async function handleSyntheticSecureCredentialDelete(args: unknown): Promise<Cal
 
 // ─── Tool Definitions ────────────────────────────────────────────────────────
 
-const periodEnum = ['EVERY_MINUTE', 'EVERY_5_MINUTES', 'EVERY_10_MINUTES', 'EVERY_15_MINUTES', 'EVERY_30_MINUTES', 'EVERY_HOUR', 'EVERY_6_HOURS', 'EVERY_12_HOURS', 'EVERY_DAY'];
+const periodEnum = PeriodEnum.options;
 
 export const syntheticToolDefinitions = [
   {

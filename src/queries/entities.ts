@@ -10,9 +10,9 @@ export const ACCOUNTS_LIST_QUERY = `
 `;
 
 export const ENTITY_SEARCH_QUERY = `
-  query EntitySearch($query: String!, $cursor: String) {
+  query EntitySearch($query: String!, $cursor: String, $limit: Int) {
     actor {
-      entitySearch(query: $query, options: { limit: 25 }) {
+      entitySearch(query: $query, options: { limit: $limit }) {
         results(cursor: $cursor) {
           entities {
             guid

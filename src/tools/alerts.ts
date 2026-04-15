@@ -117,6 +117,12 @@ const AlertMutingRuleDeleteSchema = AccountSchema.extend({ id: z.string() });
 
 // ─── Shared condition builder ────────────────────────────────────────────────
 
+/**
+ * Builds the NerdGraph AlertsNrqlConditionStaticInput object from validated
+ * tool input. Shared between create and update handlers to keep signal and
+ * expiration config in sync. Optional fields are omitted when undefined so
+ * that existing values are not inadvertently cleared on update.
+ */
 function buildNrqlConditionInput(input: {
   name: string;
   nrqlQuery: string;

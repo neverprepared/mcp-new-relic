@@ -23,6 +23,7 @@ const EntitySearchSchema = z.object({
   accountId: z.number().int().optional(),
   tags: z.record(z.string()).optional(),
   cursor: z.string().optional(),
+  limit: z.number().int().min(1).max(200).optional(),
 });
 
 const EntityGetSchema = z.object({ guid: z.string() });
@@ -71,7 +72,10 @@ const DeploymentListSchema = z.object({
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
-// Escape single quotes in NerdGraph entity search string values to prevent injection.
+/**
+ * Escapes backslashes and single quotes in a string value before interpolating
+ * it into a NerdGraph entity search query, preventing injection attacks.
+ */
 function escapeNerdGraphString(value: string): string {
   return value.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
 }
@@ -116,7 +120,7 @@ async function handleEntitySearch(args: unknown): Promise<CallToolResult> {
           count: number;
         };
       };
-    }>(ENTITY_SEARCH_QUERY, { query, cursor: input.cursor ?? null });
+    }>(ENTITY_SEARCH_QUERY, { query, cursor: input.cursor ?? null, limit: input.limit ?? 25 });
     const { entities, nextCursor } = data.actor.entitySearch.results;
     return listResponse(entities, data.actor.entitySearch.count, nextCursor, 'entities');
   });
@@ -239,6 +243,7 @@ export const entityToolDefinitions = [
         accountId: { type: 'number', description: 'Account ID filter' },
         tags: { type: 'object', description: 'Key-value tag filters', additionalProperties: { type: 'string' } },
         cursor: { type: 'string', description: 'Pagination cursor from previous response' },
+        limit: { type: 'number', description: 'Max results per page (1–200, default 25)' },
       },
     },
   },
