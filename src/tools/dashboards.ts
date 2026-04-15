@@ -28,6 +28,7 @@ const WidgetLayoutSchema = z.object({
 const DashboardWidgetSchema = z.object({
   title: z.string(),
   layout: WidgetLayoutSchema,
+  visualization: z.object({ id: z.string() }),
   rawConfiguration: z.record(z.unknown()),
 });
 
@@ -190,9 +191,15 @@ export const dashboardToolDefinitions = [
                       },
                       required: ['row', 'column', 'height', 'width'],
                     },
-                    rawConfiguration: { type: 'object', description: 'Widget configuration JSON' },
+                    visualization: {
+                      type: 'object',
+                      description: 'Widget type identifier, e.g. { "id": "viz.line" }. Common values: viz.line, viz.area, viz.bar, viz.pie, viz.table, viz.billboard, viz.markdown',
+                      properties: { id: { type: 'string' } },
+                      required: ['id'],
+                    },
+                    rawConfiguration: { type: 'object', description: 'Widget configuration JSON (nrqlQueries, thresholds, etc.)' },
                   },
-                  required: ['title', 'layout', 'rawConfiguration'],
+                  required: ['title', 'layout', 'visualization', 'rawConfiguration'],
                 },
               },
             },
@@ -224,7 +231,33 @@ export const dashboardToolDefinitions = [
             properties: {
               name: { type: 'string' },
               description: { type: 'string' },
-              widgets: { type: 'array', items: { type: 'object' } },
+              widgets: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    title: { type: 'string' },
+                    layout: {
+                      type: 'object',
+                      properties: {
+                        row: { type: 'number' },
+                        column: { type: 'number' },
+                        height: { type: 'number' },
+                        width: { type: 'number' },
+                      },
+                      required: ['row', 'column', 'height', 'width'],
+                    },
+                    visualization: {
+                      type: 'object',
+                      description: 'Widget type identifier, e.g. { "id": "viz.line" }. Common values: viz.line, viz.area, viz.bar, viz.pie, viz.table, viz.billboard, viz.markdown',
+                      properties: { id: { type: 'string' } },
+                      required: ['id'],
+                    },
+                    rawConfiguration: { type: 'object', description: 'Widget configuration JSON (nrqlQueries, thresholds, etc.)' },
+                  },
+                  required: ['title', 'layout', 'visualization', 'rawConfiguration'],
+                },
+              },
             },
             required: ['name'],
           },
