@@ -7,6 +7,9 @@
   "bin": {
     "mcp-new-relic": "./dist/index.js"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "tsx src/index.ts",
     "build": "tsc",
