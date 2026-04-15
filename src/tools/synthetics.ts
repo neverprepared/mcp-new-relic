@@ -32,6 +32,11 @@ const LocationsSchema = z.object({
   private: z.array(z.string()).optional(),
 });
 
+const LocationsRequiredSchema = LocationsSchema.refine(
+  (loc) => (loc.public?.length ?? 0) + (loc.private?.length ?? 0) > 0,
+  { message: 'At least one location (public or private) is required' }
+);
+
 const SyntheticMonitorsListSchema = z.object({ cursor: z.string().optional() });
 const SyntheticMonitorGetSchema = z.object({ guid: z.string() });
 
@@ -41,7 +46,7 @@ const SyntheticSimpleMonitorCreateSchema = z.object({
   uri: z.string(),
   period: PeriodEnum,
   status: StatusEnum,
-  locations: LocationsSchema,
+  locations: LocationsRequiredSchema,
   validationString: z.string().optional(),
   verifySsl: z.boolean().optional(),
   bypassHeadRequest: z.boolean().optional(),
@@ -57,7 +62,7 @@ const SyntheticScriptedMonitorCreateSchema = z.object({
   scriptLanguage: z.string().optional(),
   period: PeriodEnum,
   status: StatusEnum,
-  locations: LocationsSchema,
+  locations: LocationsRequiredSchema,
   type: z.enum(['SCRIPT_BROWSER', 'SCRIPT_API']),
   runtimeType: z.string().optional(),
   runtimeTypeVersion: z.string().optional(),
@@ -162,7 +167,7 @@ async function handleSyntheticSimpleMonitorCreate(args: unknown): Promise<CallTo
     };
     const advancedOptions = buildAdvancedOptions(input);
     if (advancedOptions) monitor['advancedOptions'] = advancedOptions;
-    if (input.runtimeType) {
+    if (input.runtimeType !== undefined) {
       monitor['runtime'] = { runtimeType: input.runtimeType, runtimeTypeVersion: input.runtimeTypeVersion ?? '' };
     }
     const data = await nerdgraph<{ syntheticsCreateSimpleBrowserMonitor: SyntheticsResult }>(

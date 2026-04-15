@@ -9,7 +9,9 @@ const LEVELS: Record<LogLevel, number> = {
   error: 3,
 };
 
-const currentLevel: LogLevel = (process.env['LOG_LEVEL'] as LogLevel | undefined) ?? 'info';
+const VALID_LOG_LEVELS = new Set<string>(['debug', 'info', 'warn', 'error']);
+const rawLevel = process.env['LOG_LEVEL'];
+const currentLevel: LogLevel = (rawLevel && VALID_LOG_LEVELS.has(rawLevel) ? rawLevel : 'info') as LogLevel;
 
 function log(level: LogLevel, message: string, data?: unknown): void {
   if (LEVELS[level] < LEVELS[currentLevel]) return;

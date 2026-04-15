@@ -81,7 +81,7 @@ function buildEntitySearchQuery(input: z.infer<typeof EntitySearchSchema>): stri
   if (input.name) parts.push(`name LIKE '%${escapeNerdGraphString(input.name)}%'`);
   if (input.type) parts.push(`type = '${escapeNerdGraphString(input.type)}'`);
   if (input.domain) parts.push(`domain = '${escapeNerdGraphString(input.domain)}'`);
-  if (input.accountId) parts.push(`accountId = ${input.accountId}`);
+  if (input.accountId !== undefined) parts.push(`accountId = ${input.accountId}`);
   if (input.tags) {
     for (const [k, v] of Object.entries(input.tags)) {
       parts.push(`tags.${escapeNerdGraphString(k)} = '${escapeNerdGraphString(v)}'`);
@@ -135,7 +135,7 @@ async function handleEntityTagsAdd(args: unknown): Promise<CallToolResult> {
       taggingAddTagsToEntity: { errors: { message: string; type: string }[] };
     }>(ENTITY_TAGS_ADD_MUTATION, { guid, tags });
     const { errors } = data.taggingAddTagsToEntity;
-    if (errors.length > 0) {
+    if (errors && errors.length > 0) {
       return { content: [{ type: 'text', text: `Errors: ${errors.map((e) => e.message).join('; ')}` }], isError: true };
     }
     return { content: [{ type: 'text', text: `Tags successfully added to entity ${guid}.` }] };
@@ -148,7 +148,7 @@ async function handleEntityTagsDelete(args: unknown): Promise<CallToolResult> {
       taggingDeleteTagFromEntity: { errors: { message: string; type: string }[] };
     }>(ENTITY_TAGS_DELETE_MUTATION, { guid, tagKeys });
     const { errors } = data.taggingDeleteTagFromEntity;
-    if (errors.length > 0) {
+    if (errors && errors.length > 0) {
       return { content: [{ type: 'text', text: `Errors: ${errors.map((e) => e.message).join('; ')}` }], isError: true };
     }
     return { content: [{ type: 'text', text: `Tag keys [${tagKeys.join(', ')}] deleted from entity ${guid}.` }] };
@@ -161,7 +161,7 @@ async function handleEntityTagsReplace(args: unknown): Promise<CallToolResult> {
       taggingReplaceTagsOnEntity: { errors: { message: string; type: string }[] };
     }>(ENTITY_TAGS_REPLACE_MUTATION, { guid, tags });
     const { errors } = data.taggingReplaceTagsOnEntity;
-    if (errors.length > 0) {
+    if (errors && errors.length > 0) {
       return { content: [{ type: 'text', text: `Errors: ${errors.map((e) => e.message).join('; ')}` }], isError: true };
     }
     return { content: [{ type: 'text', text: `Tags replaced on entity ${guid}.` }] };
