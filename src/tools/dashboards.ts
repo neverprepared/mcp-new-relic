@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { nerdgraph } from '../client.js';
-import { acct, handle, listResponse, mutationErrorResult } from './utils.js';
+import { acct, handle, jsonResult, listResponse, mutationErrorResult } from './utils.js';
 import {
   DASHBOARDS_LIST_QUERY,
   DASHBOARD_GET_QUERY,
@@ -76,7 +76,7 @@ async function handleDashboardList(args: unknown): Promise<CallToolResult> {
 async function handleDashboardGet(args: unknown): Promise<CallToolResult> {
   return handle(DashboardGetSchema, args, async ({ guid }) => {
     const data = await nerdgraph<{ actor: { entity: unknown } }>(DASHBOARD_GET_QUERY, { guid });
-    return { content: [{ type: 'text', text: JSON.stringify(data.actor.entity, null, 2) }] };
+    return jsonResult(data.actor.entity);
   });
 }
 
@@ -96,7 +96,7 @@ async function handleDashboardCreate(args: unknown): Promise<CallToolResult> {
     }>(DASHBOARD_CREATE_MUTATION, { accountId: acct(input), dashboard });
     const errCheck = mutationErrorResult(data.dashboardCreate.errors, 'Dashboard create');
     if (errCheck) return errCheck;
-    return { content: [{ type: 'text', text: `Dashboard created:\n\n${JSON.stringify(data.dashboardCreate.entityResult, null, 2)}` }] };
+    return jsonResult(data.dashboardCreate.entityResult, 'Dashboard created');
   });
 }
 
@@ -116,7 +116,7 @@ async function handleDashboardUpdate(args: unknown): Promise<CallToolResult> {
     }>(DASHBOARD_UPDATE_MUTATION, { guid: input.guid, dashboard });
     const errCheck = mutationErrorResult(data.dashboardUpdate.errors, 'Dashboard update');
     if (errCheck) return errCheck;
-    return { content: [{ type: 'text', text: `Dashboard updated:\n\n${JSON.stringify(data.dashboardUpdate.entityResult, null, 2)}` }] };
+    return jsonResult(data.dashboardUpdate.entityResult, 'Dashboard updated');
   });
 }
 

@@ -11,12 +11,18 @@ if (!accountIdStr) {
 }
 
 const accountId = parseInt(accountIdStr, 10);
-if (isNaN(accountId)) {
-  throw new ConfigError(`NEW_RELIC_ACCOUNT_ID must be a valid integer, got: ${accountIdStr}`);
+if (isNaN(accountId) || accountId <= 0) {
+  throw new ConfigError(`NEW_RELIC_ACCOUNT_ID must be a positive integer, got: ${accountIdStr}`);
 }
+
+const region = process.env['NEW_RELIC_REGION'];
+const NERDGRAPH_ENDPOINT =
+  region?.toUpperCase() === 'EU'
+    ? 'https://api.eu.newrelic.com/graphql'
+    : 'https://api.newrelic.com/graphql';
 
 export const CONFIG = {
   NEW_RELIC_API_KEY: apiKey,
   NEW_RELIC_ACCOUNT_ID: accountId,
-  NERDGRAPH_ENDPOINT: 'https://api.newrelic.com/graphql',
+  NERDGRAPH_ENDPOINT,
 } as const;

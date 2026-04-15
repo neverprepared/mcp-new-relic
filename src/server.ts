@@ -28,17 +28,21 @@ export async function startServer(): Promise<void> {
 
   const transport = new StdioServerTransport();
 
-  process.on('SIGINT', async () => {
-    logger.info('Received SIGINT, shutting down');
-    await server.close();
+  let isShuttingDown = false;
+  const shutdown = async (signal: string): Promise<void> => {
+    if (isShuttingDown) return;
+    isShuttingDown = true;
+    logger.info(`Received ${signal}, shutting down`);
+    try {
+      await server.close();
+    } catch (err) {
+      logger.error('Error during shutdown', err instanceof Error ? err.message : String(err));
+    }
     process.exit(0);
-  });
+  };
 
-  process.on('SIGTERM', async () => {
-    logger.info('Received SIGTERM, shutting down');
-    await server.close();
-    process.exit(0);
-  });
+  process.on('SIGINT', () => { void shutdown('SIGINT'); });
+  process.on('SIGTERM', () => { void shutdown('SIGTERM'); });
 
   await server.connect(transport);
   logger.info('mcp-new-relic server started');

@@ -67,6 +67,7 @@ Or if installed globally:
 |---------------------|----------|-------------|
 | `NEW_RELIC_API_KEY` | Yes | New Relic User API Key (`NRAK-...`) |
 | `NEW_RELIC_ACCOUNT_ID` | Yes | Default account ID (integer). Used when `accountId` is omitted from a tool call. |
+| `NEW_RELIC_REGION` | No | Set to `EU` to use the EU NerdGraph endpoint (`api.eu.newrelic.com`) |
 | `LOG_LEVEL` | No | Log verbosity: `debug`, `info` (default), `warn`, `error` |
 
 ### Multi-account usage

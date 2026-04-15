@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { nerdgraph } from '../client.js';
-import { acct, handle, listResponse } from './utils.js';
+import { acct, handle, jsonResult, listResponse } from './utils.js';
 import {
   ACCOUNTS_LIST_QUERY,
   ENTITY_SEARCH_QUERY,
@@ -125,7 +125,7 @@ async function handleEntitySearch(args: unknown): Promise<CallToolResult> {
 async function handleEntityGet(args: unknown): Promise<CallToolResult> {
   return handle(EntityGetSchema, args, async ({ guid }) => {
     const data = await nerdgraph<{ actor: { entity: unknown } }>(ENTITY_GET_QUERY, { guid });
-    return { content: [{ type: 'text', text: JSON.stringify(data.actor.entity, null, 2) }] };
+    return jsonResult(data.actor.entity);
   });
 }
 
@@ -205,7 +205,7 @@ async function handleDeploymentRecord(args: unknown): Promise<CallToolResult> {
       DEPLOYMENT_RECORD_MUTATION,
       { deployment }
     );
-    return { content: [{ type: 'text', text: `Deployment recorded:\n\n${JSON.stringify(data.changeTrackingCreateDeployment, null, 2)}` }] };
+    return jsonResult(data.changeTrackingCreateDeployment, 'Deployment recorded');
   });
 }
 
@@ -215,7 +215,7 @@ async function handleDeploymentList(args: unknown): Promise<CallToolResult> {
       guid: input.entityGuid,
       limit: input.limit ?? 25,
     });
-    return { content: [{ type: 'text', text: JSON.stringify(data.actor.entity, null, 2) }] };
+    return jsonResult(data.actor.entity);
   });
 }
 

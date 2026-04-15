@@ -2,6 +2,10 @@ import { z } from 'zod';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { CONFIG } from '../config.js';
 
+// ─── Shared schemas ─────────────────────────────────────────────────────────
+
+export const AccountSchema = z.object({ accountId: z.number().int().optional() });
+
 // ─── Error result ────────────────────────────────────────────────────────────
 
 export function errResult(err: unknown): CallToolResult {
@@ -51,6 +55,15 @@ export function mutationErrorResult(errors: TypedError[] | null | undefined, sou
     content: [{ type: 'text', text: `${source} errors:\n${errors.map((e) => `[${e.type}] ${e.description}`).join('\n')}` }],
     isError: true,
   };
+}
+
+// ─── JSON tool result ────────────────────────────────────────────────────────
+
+export function jsonResult(data: unknown, label?: string): CallToolResult {
+  const text = label
+    ? `${label}:\n\n${JSON.stringify(data, null, 2)}`
+    : JSON.stringify(data, null, 2);
+  return { content: [{ type: 'text', text }] };
 }
 
 // ─── Handler wrapper ─────────────────────────────────────────────────────────

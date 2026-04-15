@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { nerdgraph } from '../client.js';
-import { acct, handle, listResponse, mutationErrorResult } from './utils.js';
+import { acct, handle, jsonResult, listResponse, mutationErrorResult } from './utils.js';
 import {
   SYNTHETIC_MONITORS_LIST_QUERY,
   SYNTHETIC_MONITOR_GET_QUERY,
@@ -152,7 +152,7 @@ async function handleSyntheticMonitorList(args: unknown): Promise<CallToolResult
 async function handleSyntheticMonitorGet(args: unknown): Promise<CallToolResult> {
   return handle(SyntheticMonitorGetSchema, args, async ({ guid }) => {
     const data = await nerdgraph<{ actor: { entity: unknown } }>(SYNTHETIC_MONITOR_GET_QUERY, { guid });
-    return { content: [{ type: 'text', text: JSON.stringify(data.actor.entity, null, 2) }] };
+    return jsonResult(data.actor.entity);
   });
 }
 
@@ -176,7 +176,7 @@ async function handleSyntheticSimpleMonitorCreate(args: unknown): Promise<CallTo
     );
     const errCheck = mutationErrorResult(data.syntheticsCreateSimpleBrowserMonitor.errors, 'Synthetics');
     if (errCheck) return errCheck;
-    return { content: [{ type: 'text', text: `Simple browser monitor created:\n\n${JSON.stringify(data.syntheticsCreateSimpleBrowserMonitor.monitor, null, 2)}` }] };
+    return jsonResult(data.syntheticsCreateSimpleBrowserMonitor.monitor, 'Simple browser monitor created');
   });
 }
 
@@ -201,7 +201,7 @@ async function handleSyntheticScriptedMonitorCreate(args: unknown): Promise<Call
       );
       const errCheck = mutationErrorResult(data.syntheticsCreateScriptBrowserMonitor.errors, 'Synthetics');
       if (errCheck) return errCheck;
-      return { content: [{ type: 'text', text: `Scripted browser monitor created:\n\n${JSON.stringify(data.syntheticsCreateScriptBrowserMonitor.monitor, null, 2)}` }] };
+      return jsonResult(data.syntheticsCreateScriptBrowserMonitor.monitor, 'Scripted browser monitor created');
     } else {
       const data = await nerdgraph<{ syntheticsCreateScriptApiMonitor: SyntheticsResult }>(
         SYNTHETIC_SCRIPTED_API_MONITOR_CREATE_MUTATION,
@@ -209,7 +209,7 @@ async function handleSyntheticScriptedMonitorCreate(args: unknown): Promise<Call
       );
       const errCheck = mutationErrorResult(data.syntheticsCreateScriptApiMonitor.errors, 'Synthetics');
       if (errCheck) return errCheck;
-      return { content: [{ type: 'text', text: `Scripted API monitor created:\n\n${JSON.stringify(data.syntheticsCreateScriptApiMonitor.monitor, null, 2)}` }] };
+      return jsonResult(data.syntheticsCreateScriptApiMonitor.monitor, 'Scripted API monitor created');
     }
   });
 }
@@ -233,7 +233,7 @@ async function handleSyntheticMonitorUpdate(args: unknown): Promise<CallToolResu
         );
         const errCheck = mutationErrorResult(data.syntheticsUpdateScriptBrowserMonitor.errors, 'Synthetics');
         if (errCheck) return errCheck;
-        return { content: [{ type: 'text', text: `Scripted browser monitor updated:\n\n${JSON.stringify(data.syntheticsUpdateScriptBrowserMonitor.monitor, null, 2)}` }] };
+        return jsonResult(data.syntheticsUpdateScriptBrowserMonitor.monitor, 'Scripted browser monitor updated');
       } else {
         const data = await nerdgraph<{ syntheticsUpdateScriptApiMonitor: SyntheticsResult }>(
           SYNTHETIC_SCRIPTED_API_MONITOR_UPDATE_MUTATION,
@@ -241,7 +241,7 @@ async function handleSyntheticMonitorUpdate(args: unknown): Promise<CallToolResu
         );
         const errCheck = mutationErrorResult(data.syntheticsUpdateScriptApiMonitor.errors, 'Synthetics');
         if (errCheck) return errCheck;
-        return { content: [{ type: 'text', text: `Scripted API monitor updated:\n\n${JSON.stringify(data.syntheticsUpdateScriptApiMonitor.monitor, null, 2)}` }] };
+        return jsonResult(data.syntheticsUpdateScriptApiMonitor.monitor, 'Scripted API monitor updated');
       }
     });
   } else {
@@ -261,7 +261,7 @@ async function handleSyntheticMonitorUpdate(args: unknown): Promise<CallToolResu
       );
       const errCheck = mutationErrorResult(data.syntheticsUpdateSimpleBrowserMonitor.errors, 'Synthetics');
       if (errCheck) return errCheck;
-      return { content: [{ type: 'text', text: `Simple browser monitor updated:\n\n${JSON.stringify(data.syntheticsUpdateSimpleBrowserMonitor.monitor, null, 2)}` }] };
+      return jsonResult(data.syntheticsUpdateSimpleBrowserMonitor.monitor, 'Simple browser monitor updated');
     });
   }
 }

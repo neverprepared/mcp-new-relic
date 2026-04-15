@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { nerdgraph } from '../client.js';
-import { acct, handle, listResponse } from './utils.js';
+import { AccountSchema, acct, handle, jsonResult, listResponse } from './utils.js';
 import {
   ALERT_POLICIES_LIST_QUERY,
   ALERT_POLICY_GET_QUERY,
@@ -19,8 +19,6 @@ import {
 } from '../queries/alerts.js';
 
 // ─── Schemas ────────────────────────────────────────────────────────────────
-
-const AccountSchema = z.object({ accountId: z.number().int().optional() });
 
 const AlertPoliciesListSchema = AccountSchema.extend({ cursor: z.string().optional() });
 const AlertPolicyGetSchema = AccountSchema.extend({ id: z.string() });
@@ -177,7 +175,7 @@ async function handleAlertPolicyGet(args: unknown): Promise<CallToolResult> {
     if (policies.length === 0) {
       return { content: [{ type: 'text', text: `No alert policy found with ID ${input.id}` }], isError: true };
     }
-    return { content: [{ type: 'text', text: JSON.stringify(policies[0], null, 2) }] };
+    return jsonResult(policies[0]);
   });
 }
 
@@ -187,7 +185,7 @@ async function handleAlertPolicyCreate(args: unknown): Promise<CallToolResult> {
       accountId: acct(input),
       policy: { name: input.name, incidentPreference: input.incidentPreference },
     });
-    return { content: [{ type: 'text', text: `Alert policy created:\n\n${JSON.stringify(data.alertsPolicyCreate, null, 2)}` }] };
+    return jsonResult(data.alertsPolicyCreate, 'Alert policy created');
   });
 }
 
@@ -198,7 +196,7 @@ async function handleAlertPolicyUpdate(args: unknown): Promise<CallToolResult> {
       id: input.id,
       policy: { name: input.name, incidentPreference: input.incidentPreference },
     });
-    return { content: [{ type: 'text', text: `Alert policy updated:\n\n${JSON.stringify(data.alertsPolicyUpdate, null, 2)}` }] };
+    return jsonResult(data.alertsPolicyUpdate, 'Alert policy updated');
   });
 }
 
@@ -233,7 +231,7 @@ async function handleAlertConditionCreate(args: unknown): Promise<CallToolResult
       ALERT_NRQL_CONDITION_CREATE_MUTATION,
       { accountId: acct(input), policyId: input.policyId, condition }
     );
-    return { content: [{ type: 'text', text: `NRQL alert condition created:\n\n${JSON.stringify(data.alertsNrqlConditionStaticCreate, null, 2)}` }] };
+    return jsonResult(data.alertsNrqlConditionStaticCreate, 'NRQL alert condition created');
   });
 }
 
@@ -244,7 +242,7 @@ async function handleAlertConditionUpdate(args: unknown): Promise<CallToolResult
       ALERT_NRQL_CONDITION_UPDATE_MUTATION,
       { accountId: acct(input), conditionId: input.conditionId, condition }
     );
-    return { content: [{ type: 'text', text: `NRQL alert condition updated:\n\n${JSON.stringify(data.alertsNrqlConditionStaticUpdate, null, 2)}` }] };
+    return jsonResult(data.alertsNrqlConditionStaticUpdate, 'NRQL alert condition updated');
   });
 }
 
@@ -281,7 +279,7 @@ async function handleAlertMutingRuleCreate(args: unknown): Promise<CallToolResul
       ALERT_MUTING_RULE_CREATE_MUTATION,
       { accountId: acct(input), rule }
     );
-    return { content: [{ type: 'text', text: `Muting rule created:\n\n${JSON.stringify(data.alertsMutingRuleCreate, null, 2)}` }] };
+    return jsonResult(data.alertsMutingRuleCreate, 'Muting rule created');
   });
 }
 
@@ -298,7 +296,7 @@ async function handleAlertMutingRuleUpdate(args: unknown): Promise<CallToolResul
       ALERT_MUTING_RULE_UPDATE_MUTATION,
       { accountId: acct(input), id: input.id, rule }
     );
-    return { content: [{ type: 'text', text: `Muting rule updated:\n\n${JSON.stringify(data.alertsMutingRuleUpdate, null, 2)}` }] };
+    return jsonResult(data.alertsMutingRuleUpdate, 'Muting rule updated');
   });
 }
 
