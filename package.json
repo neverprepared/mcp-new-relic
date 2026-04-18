@@ -1,6 +1,6 @@
 {
   "name": "@neverprepared/mcp-new-relic",
-  "version": "0.1.6",
+  "version": "0.1.1",
   "description": "MCP server for New Relic NerdGraph GraphQL API",
   "type": "module",
   "main": "./dist/index.js",
