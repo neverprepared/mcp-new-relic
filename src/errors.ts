@@ -1,7 +1,12 @@
+export interface NerdGraphGqlError {
+  message: string;
+  extensions?: Record<string, unknown>;
+}
+
 export class NerdGraphError extends Error {
   constructor(
     message: string,
-    public readonly gqlErrors?: unknown[]
+    public readonly gqlErrors?: Array<NerdGraphGqlError>
   ) {
     super(message);
     this.name = 'NerdGraphError';

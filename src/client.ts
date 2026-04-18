@@ -1,6 +1,6 @@
 import { GraphQLClient, ClientError } from 'graphql-request';
 import { CONFIG } from './config.js';
-import { NerdGraphError } from './errors.js';
+import { NerdGraphError, type NerdGraphGqlError } from './errors.js';
 import { logger } from './logger.js';
 
 const REQUEST_TIMEOUT_MS = 30_000;
@@ -12,6 +12,14 @@ const gqlClient = new GraphQLClient(CONFIG.NERDGRAPH_ENDPOINT, {
   },
 });
 
+/**
+ * Execute a NerdGraph GraphQL request and return the typed response body.
+ *
+ * TRUST BOUNDARY: The generic parameter T is asserted by the caller — this
+ * function performs no runtime validation of the response shape. Callers
+ * should validate critical fields before accessing them, especially when
+ * consuming nested or optional properties from the NerdGraph response.
+ */
 export async function nerdgraph<T>(
   document: string,
   variables?: Record<string, unknown>
@@ -31,11 +39,17 @@ export async function nerdgraph<T>(
     return result;
   } catch (err) {
     if (err instanceof ClientError) {
-      const gqlErrors = err.response?.errors;
-      const message =
-        gqlErrors?.map((e: { message: string }) => e.message).join('; ') ?? err.message;
+      const rawErrors = err.response?.errors;
+      // Map the graphql-request error objects to our typed NerdGraphGqlError shape.
+      const gqlErrors: NerdGraphGqlError[] | undefined = rawErrors?.map(
+        (e: { message: string; extensions?: Record<string, unknown> }) => ({
+          message: e.message,
+          ...(e.extensions !== undefined && { extensions: e.extensions }),
+        })
+      );
+      const message = gqlErrors?.map((e) => e.message).join('; ') ?? err.message;
       logger.error('nerdgraph request failed', { message, errors: gqlErrors });
-      throw new NerdGraphError(message, gqlErrors as unknown[]);
+      throw new NerdGraphError(message, gqlErrors);
     }
     throw err;
   } finally {
