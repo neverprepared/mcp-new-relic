@@ -216,8 +216,11 @@ async function handleSyntheticScriptedMonitorCreate(args: unknown): Promise<Call
 
 async function handleSyntheticMonitorUpdate(args: unknown): Promise<CallToolResult> {
   // Determine monitor type from presence of `type` field, then dispatch.
-  const raw = args as Record<string, unknown>;
-  if (raw['type'] !== undefined) {
+  // We use a plain object-and-key check rather than an `as` cast so the
+  // discrimination is safe regardless of runtime input shape.
+  const hasType =
+    typeof args === 'object' && args !== null && 'type' in args && (args as Record<string, unknown>)['type'] !== undefined;
+  if (hasType) {
     return handle(SyntheticScriptedMonitorUpdateSchema, args, async (input) => {
       const monitor: Record<string, unknown> = {
         ...(input.name !== undefined && { name: input.name }),
