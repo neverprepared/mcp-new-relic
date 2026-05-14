@@ -8,8 +8,6 @@ export const ALERT_POLICIES_LIST_QUERY = `
               id
               name
               incidentPreference
-              createdAt
-              updatedAt
             }
             nextCursor
             totalCount
@@ -30,8 +28,6 @@ export const ALERT_POLICY_GET_QUERY = `
               id
               name
               incidentPreference
-              createdAt
-              updatedAt
             }
           }
         }
@@ -46,8 +42,6 @@ export const ALERT_POLICY_CREATE_MUTATION = `
       id
       name
       incidentPreference
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -58,7 +52,6 @@ export const ALERT_POLICY_UPDATE_MUTATION = `
       id
       name
       incidentPreference
-      updatedAt
     }
   }
 `;
@@ -193,8 +186,6 @@ export const ALERT_MUTING_RULES_LIST_QUERY = `
               endRepeat
               weeklyRepeatDays
             }
-            createdAt
-            updatedAt
           }
         }
       }
@@ -209,8 +200,6 @@ export const ALERT_MUTING_RULE_CREATE_MUTATION = `
       name
       enabled
       description
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -222,7 +211,6 @@ export const ALERT_MUTING_RULE_UPDATE_MUTATION = `
       name
       enabled
       description
-      updatedAt
     }
   }
 `;
