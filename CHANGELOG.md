@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.7](https://github.com/neverprepared/mcp-new-relic/compare/v0.1.1...v0.1.7) (2026-05-14)
+
+
+### Bug Fixes
+
+* remove createdAt/updatedAt from AlertsPolicy and AlertsMutingRule selections ([6c95f0d](https://github.com/neverprepared/mcp-new-relic/commit/6c95f0d83fc1cd65bb1ce8af54fdea3176e247a3))
+
+
+### Miscellaneous Chores
+
+* override release-please baseline to ship 0.1.7 ([7eb44fc](https://github.com/neverprepared/mcp-new-relic/commit/7eb44fc07be2145842afcfe486904dcdd769f2c7))
+
 ## [0.1.1](https://github.com/neverprepared/mcp-new-relic/compare/v0.1.0...v0.1.1) (2026-04-18)
 
 
