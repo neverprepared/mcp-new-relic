@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.8](https://github.com/neverprepared/mcp-new-relic/compare/v0.1.7...v0.1.8) (2026-10-15)
+
+
+### Documentation
+
+* cover every MCP client people actually install this in ([#5](https://github.com/neverprepared/mcp-new-relic/issues/5)) ([e7e6b00](https://github.com/neverprepared/mcp-new-relic/commit/e7e6b0009d4d1364e31d282ae0aa2e92f695d418))
+
 ## [0.1.7](https://github.com/neverprepared/mcp-new-relic/compare/v0.1.1...v0.1.7) (2026-05-14)
 
 
