@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.9](https://github.com/neverprepared/mcp-new-relic/compare/v0.1.8...v0.1.9) (2026-11-06)
+
+
+### Bug Fixes
+
+* a release-please tag cannot trigger the binary build ([#8](https://github.com/neverprepared/mcp-new-relic/issues/8)) ([06f35c9](https://github.com/neverprepared/mcp-new-relic/commit/06f35c923f6ae080ceaa06b7f73481a2c555e248))
+* **release:** macos-14 is no longer allocatable, and failed silently ([#10](https://github.com/neverprepared/mcp-new-relic/issues/10)) ([c05312f](https://github.com/neverprepared/mcp-new-relic/commit/c05312f4a0f94daa723d5611a5182a907bfe16ec))
+
 ## [0.1.8](https://github.com/neverprepared/mcp-new-relic/compare/v0.1.7...v0.1.8) (2026-11-06)
 
 
