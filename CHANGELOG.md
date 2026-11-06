@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.10](https://github.com/neverprepared/mcp-new-relic/compare/v0.1.9...v0.1.10) (2026-11-06)
+
+
+### Bug Fixes
+
+* **release:** never infer the tag from the ref ([#11](https://github.com/neverprepared/mcp-new-relic/issues/11)) ([a6b1998](https://github.com/neverprepared/mcp-new-relic/commit/a6b199853a11934727ef4a484d7ff0789464f985))
+
 ## [0.1.9](https://github.com/neverprepared/mcp-new-relic/compare/v0.1.8...v0.1.9) (2026-11-06)
 
 
