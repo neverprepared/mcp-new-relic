@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.8](https://github.com/neverprepared/mcp-new-relic/compare/v0.1.7...v0.1.8) (2026-11-06)
+
+
+### Features
+
+* distribute a compiled binary via GitHub releases + Homebrew ([#7](https://github.com/neverprepared/mcp-new-relic/issues/7)) ([00c4007](https://github.com/neverprepared/mcp-new-relic/commit/00c4007e124d67cfccbb4dc843cbdeefd2761c2c))
+
+
+### Documentation
+
+* cover every MCP client people actually install this in ([#5](https://github.com/neverprepared/mcp-new-relic/issues/5)) ([e7e6b00](https://github.com/neverprepared/mcp-new-relic/commit/e7e6b0009d4d1364e31d282ae0aa2e92f695d418))
+
 ## [0.1.7](https://github.com/neverprepared/mcp-new-relic/compare/v0.1.1...v0.1.7) (2026-05-14)
 
 
